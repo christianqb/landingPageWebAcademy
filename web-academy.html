@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Página de inscrição para o curso Web Academy.">
+  <title>Web Academy — Inscrição</title>
+  <style>
+
+    :root { color-scheme:dark; --bg:#090c10; --panel:#101318; --input:#0c0f13; --hover:#181d25; --text:#e4e6ed; --muted:#99a1b0; --border:#242931; --green:#00d6a0; --green-bg:#102b27; --grid:rgba(0,214,160,.035); --error:#ff9393; --scale:1; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; scroll-padding-top:100px; }
+    body { margin:0; font-family:Arial, Helvetica, sans-serif; background:var(--bg); color:var(--text); font-size:calc(16px * var(--scale)); }
+    body.light { color-scheme:light; --bg:#f3f6f5; --panel:#ffffff; --input:#f7faf9; --hover:#edf1ef; --text:#202a32; --muted:#596575; --border:#d5ded9; --green:#007b5c; --green-bg:#e0f2ea; --grid:rgba(0,123,92,.05); --error:#ba3535; }
+    button, input, select { font:inherit; }
+    button, a, input, select { -webkit-tap-highlight-color:transparent; }
+    button, a { touch-action:manipulation; }
+    a { color:inherit; text-decoration:none; }
+    button { cursor:pointer; }
+    :focus-visible { outline:2px solid var(--green); outline-offset:4px; }
+    .icon { width:21px; height:21px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
+    .svg-library { position:absolute; width:0; height:0; overflow:hidden; }
+    .sidebar { position:fixed; inset:0 auto 0 0; width:260px; background:var(--panel); border-right:1px solid var(--border); z-index:20; display:flex; flex-direction:column; transition:transform .2s; }
+    .sidebar-brand { display:flex; flex-direction:column; justify-content:center; min-height:95px; padding:22px 23px; border-bottom:1px solid var(--border); }
+    .wordmark { color:var(--text); font-size:24px; font-weight:700; letter-spacing:-1.6px; line-height:1; }
+    .wordmark span { font-weight:400; }
+    .tagline { font-size:8px; letter-spacing:.2px; margin:3px 0 12px 46px; }
+    .portal-label { color:var(--green); font-size:11px; letter-spacing:1.2px; }
+    nav { padding:22px 10px; display:grid; gap:8px; }
+    .nav-link { display:flex; align-items:center; gap:13px; padding:17px 16px; border:1px solid transparent; border-radius:15px; color:var(--muted); font-weight:600; font-size:.95em; }
+    .nav-link:hover { color:var(--text); background:var(--hover); }
+    .nav-link.active { color:var(--green); background:var(--green-bg); border-color:color-mix(in srgb, var(--green) 35%, transparent); }
+    .sidebar-bottom { margin-top:auto; padding:15px 12px; border-top:1px solid var(--border); }
+    .visitor { border:1px solid var(--border); border-radius:16px; padding:15px; display:flex; align-items:center; gap:12px; background:var(--hover); }
+    .avatar { width:38px; height:38px; display:grid; place-items:center; border-radius:50%; color:var(--green); background:var(--green-bg); }
+    .visitor strong { display:block; font-size:.8em; margin-bottom:6px; }
+    .visitor small { color:var(--muted); font-size:.65em; letter-spacing:.4px; }
+    .workspace { margin-left:260px; min-height:100vh; display:flex; flex-direction:column; background-image:linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg,var(--grid) 1px,transparent 1px); background-size:50px 50px; transition:margin-left .2s; }
+    .topbar { height:70px; flex-shrink:0; display:flex; justify-content:space-between; align-items:center; padding:0 28px; border-bottom:1px solid var(--border); background:var(--panel); position:sticky; top:0; z-index:10; }
+    .topbar-start, .tools { display:flex; align-items:center; gap:12px; }
+    .topbar-title { font-weight:700; font-size:1em; }
+    .icon-button { width:37px; height:37px; display:grid; place-items:center; color:var(--muted); border:1px solid var(--border); border-radius:9px; background:transparent; }
+    .icon-button:hover { color:var(--green); background:var(--hover); }
+    .font-controls { display:flex; gap:3px; padding:4px; border:1px solid var(--border); border-radius:9px; }
+    .font-controls button { color:var(--muted); background:transparent; border:0; border-radius:5px; height:25px; width:26px; font-weight:700; }
+    .font-controls button[aria-pressed="true"] { background:var(--green-bg); color:var(--green); }
+    main { width:100%; max-width:1250px; padding:32px 28px 38px; margin:0 auto; flex:1; }
+    h1 { margin:0 0 12px; font-size:2em; letter-spacing:-.8px; }
+    .subtitle { margin:0; color:var(--muted); font-size:.9em; line-height:1.6; }
+    .tabs { display:inline-flex; padding:5px; gap:5px; background:var(--panel); border:1px solid var(--border); border-radius:12px; margin:30px 0 25px; }
+    .tabs a { padding:11px 20px; border-radius:8px; color:var(--muted); font-size:.85em; font-weight:600; }
+    .tabs a.active { color:var(--text); background:var(--hover); }
+    .tabs a:hover { color:var(--green); }
+    .content-grid { display:grid; grid-template-columns:minmax(0, 1.6fr) minmax(260px,1fr); gap:24px; align-items:start; }
+    .form-card, .info-card { background:var(--panel); border:1px solid var(--border); border-radius:16px; }
+    .form-card { padding:28px; min-width:0; }
+    .form-heading { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:10px; }
+    h2 { font-size:1.2em; letter-spacing:-.3px; margin:0; }
+    .step { font-size:.65em; font-weight:700; letter-spacing:.8px; color:var(--green); background:var(--green-bg); padding:7px 10px; border-radius:6px; }
+    .form-description { color:var(--muted); font-size:.82em; line-height:1.7; margin:0 0 25px; }
+    .field { margin-bottom:20px; }
+    label { display:block; font-weight:600; font-size:.82em; margin-bottom:9px; }
+    .optional { font-weight:400; font-size:.9em; color:var(--muted); }
+    input:not([type="checkbox"]), select { width:100%; min-height:46px; padding:12px 13px; border:1px solid var(--border); border-radius:8px; background:var(--input); color:var(--text); font-size:.85em; }
+    input::placeholder { color:var(--muted); opacity:.8; }
+    input:focus, select:focus { outline:2px solid var(--green); outline-offset:1px; }
+    input[aria-invalid="true"], select[aria-invalid="true"] { border-color:var(--error); }
+    .two-fields { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+    .error { display:block; margin-top:7px; font-size:.75em; line-height:1.5; color:var(--error); }
+    .error:empty { display:none; }
+    .checkbox-label { display:flex; gap:10px; align-items:flex-start; font-weight:400; color:var(--muted); font-size:.76em; line-height:1.6; cursor:pointer; }
+    input[type="checkbox"] { width:17px; height:17px; flex-shrink:0; margin:2px 0 0; accent-color:var(--green); }
+    .submit { display:flex; justify-content:center; align-items:center; gap:12px; width:100%; margin-top:23px; border:1px solid var(--green); border-radius:9px; padding:14px; background:var(--green); color:#05251e; font-size:.88em; font-weight:700; }
+    body.light .submit { color:white; }
+    .submit:hover { filter:brightness(1.1); }
+    .arrow { font-size:1.25em; }
+    .demo-note { display:flex; align-items:flex-start; gap:7px; font-size:.7em; color:var(--muted); line-height:1.6; margin:14px 0 0; }
+    .demo-note svg { flex-shrink:0; margin-top:1px; }
+    .info-card { padding:25px; margin-bottom:20px; }
+    .info-tag { display:inline-flex; align-items:center; gap:7px; color:var(--green); background:var(--green-bg); font-size:.65em; letter-spacing:.8px; padding:7px 9px; border-radius:6px; margin-bottom:19px; }
+    .info-card h2 { font-size:1.35em; margin-bottom:12px; }
+    .info-card p { color:var(--muted); font-size:.83em; line-height:1.8; margin:0; }
+    .info-divider { height:1px; background:var(--border); margin:23px 0; }
+    .small-title { color:var(--muted); font-size:.65em; font-weight:600; letter-spacing:1px; margin:0 0 15px; }
+    .path { display:grid; gap:12px; }
+    .path-item { display:flex; align-items:center; gap:12px; }
+    .path-number { width:33px; height:33px; display:grid; place-items:center; background:var(--green-bg); color:var(--green); border-radius:8px; font-size:.7em; }
+    .path-item strong { display:block; font-size:.8em; margin-bottom:4px; }
+    .path-item small { color:var(--muted); font-size:.73em; }
+    .help-heading { display:flex; align-items:center; gap:10px; margin-bottom:13px; }
+    .help-heading .icon { color:var(--green); }
+    .help-heading h2 { font-size:.95em; margin:0; }
+    .success { text-align:center; padding:50px 0; }
+    .success-icon { display:grid; place-items:center; width:60px; height:60px; border-radius:50%; margin:0 auto 20px; background:var(--green-bg); color:var(--green); font-size:28px; }
+    .success p { font-size:.85em; color:var(--muted); line-height:1.8; }
+    footer { padding:19px 28px; display:flex; justify-content:space-between; gap:15px; color:var(--muted); font-size:.65em; border-top:1px solid var(--border); }
+    noscript { color:var(--error); font-size:.8em; }
+    [hidden] { display:none !important; }
+    .overlay { display:none; }
+    body.sidebar-collapsed .sidebar { transform:translateX(-100%); }
+    body.sidebar-collapsed .workspace { margin-left:0; }
+    @media(max-width:1100px) { .sidebar { width:230px; } .workspace { margin-left:230px; } .content-grid { grid-template-columns:1fr; } .course-info { display:grid; grid-template-columns:1fr 1fr; gap:20px; } .info-card { margin-bottom:0; } }
+    @media(max-width:760px) { .sidebar { width:260px; transform:translateX(-100%); } .workspace { margin-left:0; } body.menu-open .sidebar { transform:translateX(0); } body.menu-open .overlay { display:block; position:fixed; inset:0; background:#0009; border:0; z-index:15; } .topbar { padding:0 18px; height:65px; } main { padding:27px 18px; } .course-info { grid-template-columns:1fr; } .form-card { padding:23px 20px; } h1 { font-size:1.8em; } footer { padding:18px; flex-direction:column; gap:7px; } }
+    @media(max-width:440px) { .two-fields { grid-template-columns:1fr; gap:0; } .topbar-start { gap:8px; } .tools { gap:7px; } .tabs a { padding:10px 15px; } }
+    @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } * { transition:none !important; } }
+  </style>
+</head>
+<body>
+
+  <svg class="svg-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></symbol>
+    <symbol id="document" viewBox="0 0 24 24"><path d="M14 2H5v20h14V7zM14 2v6h5M8 12h8M8 16h6"/></symbol>
+    <symbol id="help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 .5c0 2-2.5 2-2.5 4M12 17h.01"/></symbol>
+    <symbol id="user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></symbol>
+    <symbol id="moon" viewBox="0 0 24 24"><path d="M21 13a9 9 0 0 1-10-10 9 9 0 1 0 10 10z"/></symbol>
+    <symbol id="menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+  </defs></svg>
+  <aside class="sidebar" id="sidebar" aria-label="Menu lateral">
+    <a class="sidebar-brand" href="#inicio" aria-label="Web Academy — início"><span class="wordmark">web<span>academy</span></span><span class="tagline">Training and Research</span><span class="portal-label">PORTAL DE INSCRIÇÃO</span></a>
+    <nav aria-label="Navegação principal">
+      <a class="nav-link" href="#sobre"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#grid"/></svg><span>Sobre o curso</span></a>
+      <a class="nav-link active" href="#dados" aria-current="page"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#document"/></svg><span>Inscrição</span></a>
+      <a class="nav-link" href="#ajuda"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#help"/></svg><span>Ajuda</span></a>
+    </nav>
+    <div class="sidebar-bottom"><div class="visitor"><span class="avatar"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#user"/></svg></span><div><strong>Visitante</strong><small>FUTURO ALUNO</small></div></div></div>
+  </aside>
+  <button class="overlay" id="overlay" type="button" aria-label="Fechar menu lateral" tabindex="-1"></button>
+  <div class="workspace">
+    <header class="topbar">
+      <div class="topbar-start"><button type="button" class="icon-button" id="menu-toggle" aria-label="Alternar menu lateral" aria-controls="sidebar" aria-expanded="true"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#menu"/></svg></button><span class="topbar-title">Inscrição</span></div>
+      <div class="tools"><div class="font-controls" role="group" aria-label="Tamanho do texto"><button type="button" data-scale="1" aria-label="Texto padrão" aria-pressed="true" style="font-size:12px">A</button><button type="button" data-scale="1.1" aria-label="Texto médio" aria-pressed="false" style="font-size:15px">A</button><button type="button" data-scale="1.2" aria-label="Texto grande" aria-pressed="false" style="font-size:18px">A</button></div><button type="button" class="icon-button" id="theme-toggle" aria-label="Ativar tema claro" aria-pressed="false"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#moon"/></svg></button></div>
+    </header>
+    <main id="inicio">
+      <h1>Inscrição</h1>
+      <p class="subtitle">Bem-vindo ao Web Academy. Preencha seus dados para começar.</p>
+      <div class="tabs" aria-label="Seções da inscrição"><a class="active" href="#dados">Dados pessoais</a><a href="#sobre">Sobre o curso</a></div>
+      <div class="content-grid">
+      <section class="form-card" id="dados" aria-labelledby="form-title">
+        <div id="registration">
+          <div class="form-heading"><h2 id="form-title">Dados pessoais</h2><span class="step">INSCRIÇÃO</span></div>
+          <p class="form-description">Conte um pouco sobre você.<br>Os campos com * são obrigatórios.</p>
+          <noscript>Ative o JavaScript para testar este formulário. Esta página não envia inscrições.</noscript>
+          <form id="registration-form" novalidate>
+            <div class="field">
+              <label for="name">Nome completo *</label>
+              <input id="name" name="nome" type="text" autocomplete="name" placeholder="Como você se chama?" maxlength="120" required aria-describedby="name-error">
+              <span id="name-error" class="error"></span>
+            </div>
+            <div class="field">
+              <label for="email">E-mail *</label>
+              <input id="email" name="email" type="email" autocomplete="email" placeholder="voce@exemplo.com" maxlength="254" required aria-describedby="email-error">
+              <span id="email-error" class="error"></span>
+            </div>
+            <div class="two-fields">
+              <div class="field">
+                <label for="phone">Telefone <span class="optional">(opcional)</span></label>
+                <input id="phone" name="telefone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(00) 00000-0000" maxlength="15" aria-describedby="phone-error">
+                <span id="phone-error" class="error"></span>
+              </div>
+              <div class="field">
+                <label for="level">Experiência *</label>
+                <select id="level" name="experiencia" required aria-describedby="level-error">
+                  <option value="">Selecione seu nível</option>
+                  <option value="iniciante">Estou começando</option>
+                  <option value="basico">Conheço o básico</option>
+                  <option value="intermediario">Já faço projetos</option>
+                </select>
+                <span id="level-error" class="error"></span>
+              </div>
+            </div>
+            <div class="field">
+              <label for="goal">O que você quer aprender? <span class="optional">(opcional)</span></label>
+              <input id="goal" name="objetivo" type="text" placeholder="Ex.: criar meu primeiro site" maxlength="200">
+            </div>
+            <label class="checkbox-label" for="acknowledgement">
+              <input id="acknowledgement" name="ciencia" type="checkbox" required aria-describedby="acknowledgement-error">
+              <span>Entendo que este é um formulário de demonstração e que nenhuma inscrição será enviada. *</span>
+            </label>
+            <span id="acknowledgement-error" class="error"></span>
+            <button class="submit" type="submit" id="submit-button" disabled><span>Testar minha inscrição</span><span class="arrow" aria-hidden="true">↗</span></button>
+            <p class="demo-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Seus dados ficam somente nesta página, durante o teste.</p>
+          </form>
+        </div>
+        <div id="success" class="success" hidden tabindex="-1" aria-labelledby="success-title">
+          <div class="success-icon" aria-hidden="true">✓</div>
+          <h2 id="success-title">Tudo certo, <span id="student-name"></span>!</h2>
+          <p>Os campos passaram pela validação.<br>Este teste não enviou nem salvou uma inscrição.</p>
+          <button type="button" class="submit" id="restart">Testar outra inscrição</button>
+        </div>
+      </section>
+
+        <aside class="course-info" aria-label="Informações do curso">
+          <section class="info-card" id="sobre" aria-labelledby="course-title">
+            <span class="info-tag">&lt;/&gt; DESENVOLVIMENTO WEB</span>
+            <h2 id="course-title">Web Academy</h2>
+            <p>Seu próximo capítulo na tecnologia começa com o primeiro passo.</p>
+            <div class="info-divider"></div>
+            <h3 class="small-title">PROPOSTA DE APRENDIZADO</h3>
+            <div class="path"><div class="path-item"><span class="path-number">01</span><div><strong>HTML</strong><small>Estruture suas páginas.</small></div></div><div class="path-item"><span class="path-number">02</span><div><strong>CSS</strong><small>Dê forma às suas ideias.</small></div></div><div class="path-item"><span class="path-number">03</span><div><strong>JavaScript</strong><small>Crie experiências interativas.</small></div></div></div>
+          </section>
+          <section class="info-card" id="ajuda" aria-labelledby="help-title"><div class="help-heading"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#help"/></svg><h2 id="help-title">Antes de preencher</h2></div><p>Os campos com * são obrigatórios. Informe um e-mail válido e, se preencher o telefone, inclua o DDD.</p><div class="info-divider"></div><p>Esta é uma página de demonstração. O formulário valida os dados, mas não envia uma inscrição.</p></section>
+        </aside>
+      </div>
+    </main>
+    <footer><span>Web Academy · Portal de inscrição</span><span>Modelo demonstrativo</span></footer>
+  </div>
+  <script>
+
+    const form = document.getElementById('registration-form');
+    const registration = document.getElementById('registration');
+    const success = document.getElementById('success');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const phoneInput = document.getElementById('phone');
+    const levelInput = document.getElementById('level');
+    const acknowledgement = document.getElementById('acknowledgement');
+    const fields = [nameInput, emailInput, phoneInput, levelInput, acknowledgement];
+    let attempted = false;
+
+    document.getElementById('submit-button').disabled = false;
+
+    function validate(field) {
+      let message = '';
+      if (field === nameInput && field.value.trim().length < 2) {
+        message = 'Informe seu nome com pelo menos 2 caracteres.';
+      } else if (field === emailInput) {
+        field.value = field.value.trim();
+        if (!field.value || !field.validity.valid) message = 'Informe um e-mail válido.';
+      } else if (field === phoneInput) {
+        const digits = field.value.replace(/\D/g, '');
+        if (field.value && digits.length !== 10 && digits.length !== 11) message = 'Informe um telefone com DDD (10 ou 11 dígitos).';
+      } else if (field === levelInput && !field.value) {
+        message = 'Selecione seu nível de experiência.';
+      } else if (field === acknowledgement && !field.checked) {
+        message = 'Confirme que você entende que este é um teste.';
+      }
+      document.getElementById(field.id + '-error').textContent = message;
+      field.setAttribute('aria-invalid', String(Boolean(message)));
+      return !message;
+    }
+
+    phoneInput.addEventListener('input', function () {
+      const digits = this.value.replace(/\D/g, '').slice(0, 11);
+      if (!digits) { this.value = ''; return; }
+      if (digits.length <= 2) { this.value = '(' + digits; return; }
+      const split = digits.length > 10 ? 7 : 6;
+      this.value = '(' + digits.slice(0, 2) + ') ' + digits.slice(2, split)
+        + (digits.length > split ? '-' + digits.slice(split) : '');
+    });
+
+    fields.forEach(field => {
+      field.addEventListener('blur', () => {
+        if (attempted || field.value.trim() && field !== acknowledgement) validate(field);
+      });
+      field.addEventListener(field.tagName === 'SELECT' || field.type === 'checkbox' ? 'change' : 'input', () => {
+        if (attempted) validate(field);
+      });
+    });
+
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      attempted = true;
+      const invalid = fields.filter(field => !validate(field));
+      if (invalid.length) { invalid[0].focus(); return; }
+      document.getElementById('student-name').textContent = nameInput.value.trim().split(/\s+/)[0];
+      registration.hidden = true;
+      success.hidden = false;
+      success.focus();
+    });
+
+    document.getElementById('restart').addEventListener('click', () => {
+      form.reset();
+      attempted = false;
+      fields.forEach(field => {
+        field.removeAttribute('aria-invalid');
+        document.getElementById(field.id + '-error').textContent = '';
+      });
+      document.getElementById('student-name').textContent = '';
+      success.hidden = true;
+      registration.hidden = false;
+      nameInput.focus();
+    });
+  
+    // Controles de aparência inspirados no modelo de referência.
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      const light = document.body.classList.toggle('light');
+      themeToggle.setAttribute('aria-label', light ? 'Ativar tema escuro' : 'Ativar tema claro');
+      themeToggle.setAttribute('aria-pressed', String(light));
+    });
+    document.querySelectorAll('[data-scale]').forEach(button => {
+      button.addEventListener('click', () => {
+        document.documentElement.style.setProperty('--scale', button.dataset.scale);
+        document.querySelectorAll('[data-scale]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+      });
+    });
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobile = window.matchMedia('(max-width:760px)');
+    function syncMenu() {
+      const expanded = mobile.matches ? document.body.classList.contains('menu-open') : !document.body.classList.contains('sidebar-collapsed');
+      menuToggle.setAttribute('aria-expanded', String(expanded));
+      document.getElementById('sidebar').inert = !expanded;
+    }
+    menuToggle.addEventListener('click', () => {
+      document.body.classList.toggle(mobile.matches ? 'menu-open' : 'sidebar-collapsed');
+      syncMenu();
+    });
+    function closeMobileMenu() {
+      document.body.classList.remove('menu-open');
+      syncMenu();
+    }
+    document.getElementById('overlay').addEventListener('click', () => { closeMobileMenu(); menuToggle.focus(); });
+    document.querySelectorAll('.sidebar a').forEach(link => link.addEventListener('click', closeMobileMenu));
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && document.body.classList.contains('menu-open')) { closeMobileMenu(); menuToggle.focus(); }
+    });
+    mobile.addEventListener('change', () => { document.body.classList.remove('menu-open', 'sidebar-collapsed'); syncMenu(); });
+    syncMenu();
+  </script>
+</body>
+</html>
